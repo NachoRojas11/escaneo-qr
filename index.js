@@ -3,9 +3,19 @@ window.addEventListener('load', async () => {
     const elementoVistaPrevia = document.getElementById('vista-previa');
     const elementoResultado = document.getElementById('resultado');
     const selectDispositivos = document.getElementById('dispositivos-entrada-video');
+    const debugOutput = document.createElement('div'); // Elemento para mostrar mensajes de depuración
+    document.body.appendChild(debugOutput);
+
+    function mostrarMensajeDebug(mensaje) {
+        const p = document.createElement('p');
+        p.textContent = mensaje;
+        debugOutput.appendChild(p);
+    }
 
     try {
         const dispositivos = await navigator.mediaDevices.enumerateDevices();
+        mostrarMensajeDebug('Dispositivos enumerados: ' + JSON.stringify(dispositivos));
+
         const dispositivosEntradaVideo = dispositivos.filter(dispositivo => dispositivo.kind === 'videoinput');
 
         if (dispositivosEntradaVideo.length === 0) {
@@ -30,6 +40,7 @@ window.addEventListener('load', async () => {
     } catch (error) {
         console.error('Error al enumerar dispositivos:', error);
         elementoResultado.textContent = 'Error al enumerar dispositivos.';
+        mostrarMensajeDebug('Error al enumerar dispositivos: ' + error.message);
     }
 
     async function iniciarEscaneo(deviceId) {
@@ -47,11 +58,13 @@ window.addEventListener('load', async () => {
                 }
                 if (error && !(error instanceof ZXing.NotFoundException)) {
                     console.error('Error de decodificación:', error);
+                    mostrarMensajeDebug('Error de decodificación: ' + error.message);
                 }
             });
         } catch (error) {
             console.error('Error al iniciar escaneo:', error);
             elementoResultado.textContent = 'Error al iniciar escaneo.';
+            mostrarMensajeDebug('Error al iniciar escaneo: ' + error.message);
         }
     }
 });
