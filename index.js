@@ -55,4 +55,3 @@ window.addEventListener('load', async () => {
         }
     }
 });
-
