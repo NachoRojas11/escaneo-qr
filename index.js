@@ -1,27 +1,17 @@
 window.addEventListener('load', async () => {
-    const lectorCodigo = new ZXing.BrowserMultiFormatReader();
+    const lectorCodigo = new ZXing.BrowserMultiFormatReader(); // Utilizamos BrowserMultiFormatReader para soportar múltiples formatos
     const elementoVistaPrevia = document.getElementById('vista-previa');
     const elementoResultado = document.getElementById('resultado');
     const selectDispositivos = document.getElementById('dispositivos-entrada-video');
-    const debugOutput = document.createElement('div'); // Elemento para mostrar mensajes de depuración
-    document.body.appendChild(debugOutput);
-
-    function mostrarMensajeDebug(mensaje) {
-        const p = document.createElement('p');
-        p.textContent = mensaje;
-        debugOutput.appendChild(p);
-    }
 
     try {
+        // Obtener todos los dispositivos de medios disponibles
         const dispositivos = await navigator.mediaDevices.enumerateDevices();
-        mostrarMensajeDebug('Dispositivos enumerados: ' + JSON.stringify(dispositivos));
-
+        
+        // Filtrar solo los dispositivos de entrada de video
         const dispositivosEntradaVideo = dispositivos.filter(dispositivo => dispositivo.kind === 'videoinput');
-
-        if (dispositivosEntradaVideo.length === 0) {
-            throw new Error('No se encontraron dispositivos de entrada de video.');
-        }
-
+        
+        // Agregar las opciones de dispositivos al select
         dispositivosEntradaVideo.forEach((dispositivo, indice) => {
             const option = document.createElement('option');
             option.value = dispositivo.deviceId;
@@ -29,42 +19,35 @@ window.addEventListener('load', async () => {
             selectDispositivos.appendChild(option);
         });
 
+        // Manejar el cambio de selección de dispositivo
         selectDispositivos.addEventListener('change', (event) => {
             const deviceId = event.target.value;
             iniciarEscaneo(deviceId);
         });
 
+        // Iniciar escaneo con el primer dispositivo disponible por defecto
         if (dispositivosEntradaVideo.length > 0) {
             iniciarEscaneo(dispositivosEntradaVideo[0].deviceId);
         }
     } catch (error) {
-        console.error('Error al enumerar dispositivos:', error);
-        elementoResultado.textContent = 'Error al enumerar dispositivos.';
-        mostrarMensajeDebug('Error al enumerar dispositivos: ' + error.message);
+        console.error(error);
     }
 
-    async function iniciarEscaneo(deviceId) {
+    function iniciarEscaneo(deviceId) {
         lectorCodigo.reset();
-        try {
-            await lectorCodigo.decodeFromVideoDevice(deviceId, 'vista-previa', (resultado, error) => {
-                if (resultado) {
-                    if (resultado.text.startsWith('http')) {
-                        window.location.href = resultado.text;
-                    } else if (/^\d+$/.test(resultado.text)) {
-                        elementoResultado.textContent = `Código de barras: ${resultado.text}`;
-                    } else {
-                        elementoResultado.textContent = `Contenido: ${resultado.text}`;
-                    }
+        lectorCodigo.decodeFromVideoDevice(deviceId, 'vista-previa', (resultado, error) => {
+            if (resultado) {
+                if (resultado.text.startsWith('http')) {
+                    window.location.href = resultado.text;
+                } else if (/^\d+$/.test(resultado.text)) { // Verificar si el contenido es numérico
+                    elementoResultado.textContent = `Código de barras: ${resultado.text}`;
+                } else {
+                    elementoResultado.textContent = `Contenido: ${resultado.text}`;
                 }
-                if (error && !(error instanceof ZXing.NotFoundException)) {
-                    console.error('Error de decodificación:', error);
-                    mostrarMensajeDebug('Error de decodificación: ' + error.message);
-                }
-            });
-        } catch (error) {
-            console.error('Error al iniciar escaneo:', error);
-            elementoResultado.textContent = 'Error al iniciar escaneo.';
-            mostrarMensajeDebug('Error al iniciar escaneo: ' + error.message);
-        }
+            }
+            if (error && !(error instanceof ZXing.NotFoundException)) {
+                console.error(error);
+            }
+        });
     }
 });
