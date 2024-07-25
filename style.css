@@ -17,6 +17,9 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ajuste para ocupar toda la altura */
 }
 
 header {
@@ -31,7 +34,9 @@ header h1 {
 }
 
 main {
+    flex: 1;
     padding: 20px;
+    overflow-y: auto; /* Permitir el desplazamiento en la sección principal */
 }
 
 .camera-container {
@@ -86,10 +91,15 @@ video {
     padding: 0;
     max-width: 400px;
     margin: 0 auto;
+    max-height: 200px; /* Altura máxima para la lista */
+    overflow-y: auto; /* Permitir el desplazamiento vertical */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
 }
 
 #lista-codigos li {
-    margin: 10px 0;
+    margin: 10px;
     background-color: #e0e0e0;
     padding: 10px;
     border-radius: 4px;
@@ -124,4 +134,3 @@ footer {
         max-width: 100%;
     }
 }
-
