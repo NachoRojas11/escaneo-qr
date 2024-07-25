@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escanear Código QR y Código de Barras</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="estilos.css">
     <script src="https://unpkg.com/@zxing/library@latest"></script>
 </head>
 <body>
     <h1>Escanear Código QR y Código de Barras</h1>
     <select id="dispositivos-entrada-video"></select>
-    <video id="vista-previa"></video>
+    <video id="vista-previa" autoplay muted></video>
     <div id="resultado"></div>
-    <script src="index.js"></script>
+    <div id="codigos-escaneados">
+        <h2>Códigos Escaneados:</h2>
+        <ul id="lista-codigos"></ul>
+    </div>
+    <div id="debug"></div>
+    <script src="app.js"></script>
 </body>
 </html>
