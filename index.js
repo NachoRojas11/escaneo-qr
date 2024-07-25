@@ -16,7 +16,7 @@ window.addEventListener('load', async () => {
         elementoResultado.textContent = `Último código escaneado: ${codigo}`;
     }
 
-    function iniciarEscaneo(deviceId) {
+    async function iniciarEscaneo(deviceId) {
         lectorCodigo.reset();
         lectorCodigo.decodeFromVideoDevice(deviceId, 'vista-previa', (resultado, error) => {
             if (resultado && escaneoActivo) {
@@ -49,17 +49,26 @@ window.addEventListener('load', async () => {
             selectDispositivos.appendChild(option);
         });
 
+        // Intentar seleccionar automáticamente la cámara frontal en iOS
+        const camaraFrontal = dispositivosEntradaVideo.find(dispositivo => dispositivo.label.toLowerCase().includes('front'));
+        if (camaraFrontal) {
+            iniciarEscaneo(camaraFrontal.deviceId);
+            selectDispositivos.value = camaraFrontal.deviceId;
+        } else {
+            // Iniciar escaneo con el primer dispositivo disponible por defecto
+            if (dispositivosEntradaVideo.length > 0) {
+                iniciarEscaneo(dispositivosEntradaVideo[0].deviceId);
+                selectDispositivos.value = dispositivosEntradaVideo[0].deviceId;
+            }
+        }
+
         selectDispositivos.addEventListener('change', (event) => {
             const deviceId = event.target.value;
             iniciarEscaneo(deviceId);
         });
 
-        if (dispositivosEntradaVideo.length > 0) {
-            iniciarEscaneo(dispositivosEntradaVideo[0].deviceId);
-        }
     } catch (error) {
         console.error('Error al enumerar dispositivos:', error);
         elementoResultado.textContent = 'Error al enumerar dispositivos.';
     }
 });
-
