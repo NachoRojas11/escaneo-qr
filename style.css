@@ -59,6 +59,7 @@ video {
     width: 100%;
     max-width: 600px;
     height: auto;
+    max-height: 300px; /* Altura máxima para el video */
     border: 2px solid #4CAF50;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -134,3 +135,4 @@ footer {
         max-width: 100%;
     }
 }
+
