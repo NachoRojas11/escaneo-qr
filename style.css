@@ -23,7 +23,7 @@ body {
 }
 
 header {
-    background-color: #4CAF50;
+    background-color: #f28c1e; /* Color actualizado */
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -60,7 +60,7 @@ video {
     max-width: 600px;
     height: auto;
     max-height: 300px; /* Altura máxima para el video */
-    border: 2px solid #4CAF50;
+    border: 2px solid #f28c1e; /* Color actualizado */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -83,7 +83,7 @@ video {
 
 #codigos-escaneados h2 {
     font-size: 1.5em;
-    color: #4CAF50;
+    color: #f28c1e; /* Color actualizado */
     text-align: center;
 }
 
@@ -112,7 +112,7 @@ video {
 }
 
 footer {
-    background-color: #4CAF50;
+    background-color: #f28c1e; /* Color actualizado */
     color: #fff;
     text-align: center;
     padding: 10px;
