@@ -5,6 +5,8 @@ window.addEventListener('load', async () => {
     const selectDispositivos = document.getElementById('dispositivos-entrada-video');
     const listaCodigos = document.getElementById('lista-codigos');
     const codigosEscaneados = []; // Array para almacenar los códigos escaneados
+    const delayMs = 2000; // 2 segundos de delay
+    let escaneoActivo = true; // Bandera para controlar el estado del escaneo
 
     function agregarCodigoEscaneado(codigo) {
         codigosEscaneados.push(codigo);
@@ -12,6 +14,24 @@ window.addEventListener('load', async () => {
         li.textContent = codigo;
         listaCodigos.appendChild(li);
         elementoResultado.textContent = `Último código escaneado: ${codigo}`;
+    }
+
+    function iniciarEscaneo(deviceId) {
+        lectorCodigo.reset();
+        lectorCodigo.decodeFromVideoDevice(deviceId, 'vista-previa', (resultado, error) => {
+            if (resultado && escaneoActivo) {
+                escaneoActivo = false; // Desactivar escaneo adicional
+                agregarCodigoEscaneado(resultado.text);
+
+                // Reiniciar el escaneo después del delay
+                setTimeout(() => {
+                    escaneoActivo = true; // Reactivar el escaneo
+                }, delayMs);
+            }
+            if (error && !(error instanceof ZXing.NotFoundException)) {
+                console.error('Error de decodificación:', error);
+            }
+        });
     }
 
     try {
@@ -41,28 +61,5 @@ window.addEventListener('load', async () => {
         console.error('Error al enumerar dispositivos:', error);
         elementoResultado.textContent = 'Error al enumerar dispositivos.';
     }
-
-    async function iniciarEscaneo(deviceId) {
-        lectorCodigo.reset();
-        try {
-            await lectorCodigo.decodeFromVideoDevice(deviceId, 'vista-previa', (resultado, error) => {
-                if (resultado) {
-                    agregarCodigoEscaneado(resultado.text);
-                    if (resultado.text.startsWith('http')) {
-                        window.location.href = resultado.text;
-                    } else if (/^\d+$/.test(resultado.text)) {
-                        elementoResultado.textContent = `Código de barras: ${resultado.text}`;
-                    } else {
-                        elementoResultado.textContent = `Contenido: ${resultado.text}`;
-                    }
-                }
-                if (error && !(error instanceof ZXing.NotFoundException)) {
-                    console.error('Error de decodificación:', error);
-                }
-            });
-        } catch (error) {
-            console.error('Error al iniciar escaneo:', error);
-            elementoResultado.textContent = 'Error al iniciar escaneo.';
-        }
-    }
 });
+
