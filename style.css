@@ -31,6 +31,7 @@ header {
 
 header h1 {
     margin: 0;
+    font-size: 1.5em; /* Ajuste del tamaño de la fuente */
 }
 
 main {
@@ -135,4 +136,5 @@ footer {
         max-width: 100%;
     }
 }
+
 
