@@ -32,6 +32,32 @@ video {
     text-align: center;
 }
 
+#codigos-escaneados {
+    margin-top: 20px;
+    font-size: 1em;
+    color: #333;
+    text-align: center;
+}
+
+#lista-codigos {
+    list-style-type: none;
+    padding: 0;
+}
+
+#lista-codigos li {
+    margin: 5px 0;
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+#debug {
+    margin-top: 20px;
+    font-size: 1em;
+    color: red;
+    text-align: center;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 10px;
