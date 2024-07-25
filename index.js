@@ -5,7 +5,7 @@ window.addEventListener('load', async () => {
     const selectDispositivos = document.getElementById('dispositivos-entrada-video');
     const listaCodigos = document.getElementById('lista-codigos');
     const codigosEscaneados = []; // Array para almacenar los códigos escaneados
-    const delayMs = 2000; // 2 segundos de delay
+    const delayMs = 1300; // 2 segundos de delay
     let escaneoActivo = true; // Bandera para controlar el estado del escaneo
 
     function agregarCodigoEscaneado(codigo) {
