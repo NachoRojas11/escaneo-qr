@@ -14,6 +14,11 @@ window.addEventListener('load', async () => {
         li.textContent = codigo;
         listaCodigos.appendChild(li);
         elementoResultado.textContent = `Último código escaneado: ${codigo}`;
+
+        // Redirigir si el código contiene una URL
+        if (codigo.startsWith('http://') || codigo.startsWith('https://')) {
+            window.location.href = codigo;
+        }
     }
 
     async function iniciarEscaneo(deviceId) {
